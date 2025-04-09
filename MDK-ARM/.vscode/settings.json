@@ -4,7 +4,8 @@
     "string_view": "c",
     "main.h": "c",
     "engine.h": "c",
-    "filter.h": "c"
+    "filter.h": "c",
+    "laser.h": "c"
   },
   "files.encoding": "utf8"
 }

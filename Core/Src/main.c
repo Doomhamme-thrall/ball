@@ -29,6 +29,7 @@
 #include "pid.h"
 #include "engine.h"
 #include "filter.h"
+#include "laser.h"
 
 /* USER CODE END Includes */
 
@@ -51,7 +52,7 @@
 
 /* USER CODE BEGIN PV */
 volatile int compare = 1000;
-uint8_t rxbuffer[8];
+uint8_t rxbuffer[7];
 float lenth = 0;        // 当前位置
 float speed = 0;        // 当前速度
 float target_speed = 0; // 目标速度
@@ -60,6 +61,9 @@ volatile int control_output = 0;
 volatile float filter_alpha = 0.800000006;
 int speed_limit = 10;
 int speed_before = 0;
+
+uint16_t rx_head = 0;
+uint16_t rx_tail = 0;
 
 PID_Controller_t position_pid; // 位置环
 PID_Controller_t speed_pid;    // 速度环
@@ -70,6 +74,24 @@ float i = 1.5;
 void SystemClock_Config(void);
 static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
+
+// 数据帧处理函数
+int process_frame(uint8_t *rxbuffer)
+{
+  if (rxbuffer[0] == 0x01 && rxbuffer[1] == 0x03 && rxbuffer[2] == 0x02)
+  {
+    uint16_t data = (rxbuffer[3] << 8) | rxbuffer[4];
+    if (data <= 2000)
+    {
+      return data;
+    }
+    else
+    {
+      return -1;
+    }
+  }
+  return -1;
+}
 
 /* USER CODE END PFP */
 
@@ -121,8 +143,7 @@ int main(void)
 
   HAL_GPIO_WritePin(GPIOE, GPIO_PIN_8, GPIO_PIN_SET);
 
-  // UART_Start_Receive_DMA(&huart1, rxbuffer, 6);
-  UART_Start_Receive_DMA(&huart2, rxbuffer, 6);
+  UART_Start_Receive_DMA(&huart1, rxbuffer, 7);
 
   /* USER CODE END 2 */
 
@@ -130,13 +151,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if (rxbuffer[0] == 0xAA && rxbuffer[5] == 0xFF)
-    {
-      lenth = (float)(int16_t)(rxbuffer[1] << 8 | rxbuffer[2]) / 100;
-      speed = (float)(int16_t)(rxbuffer[3] << 8 | rxbuffer[4]) / 100;
-      memset(rxbuffer, 0, sizeof(rxbuffer));
-      flag = 1;
-    }
+    lenth = laser_processframe(rxbuffer) / 1000.0; // 当前位置
     if (flag == 1)
     {
       target_speed = -PID_Cal(&speed_pid, lenth, target_lenth);
@@ -145,7 +160,7 @@ int main(void)
       /* USER CODE END WHILE */
 
       /* USER CODE BEGIN 3 */
-      target_speed = lowpass_filter(target_speed, filter_alpha);
+      // target_speed = lowpass_filter(target_speed, filter_alpha);
       if (fabs(target_speed - speed_before) > speed_limit)
       {
         speed_before += speed_limit;
@@ -154,7 +169,7 @@ int main(void)
       speed_before = speed;
       flag = 0;
     }
-    //    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, control_output);
+    __HAL_TIM_SetCompare(&htim1, TIM_CHANNEL_1, control_output);
   }
   /* USER CODE END 3 */
 }
