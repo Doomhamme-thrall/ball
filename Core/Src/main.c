@@ -30,6 +30,8 @@
 #include "engine.h"
 #include "filter.h"
 #include "laser.h"
+#include "motor.h"
+#include "motor_control.h"
 
 /* USER CODE END Includes */
 
@@ -68,6 +70,8 @@ uint16_t rx_tail = 0;
 PID_Controller_t position_pid; // 位置环
 PID_Controller_t speed_pid;    // 速度环
 float i = 1.5;
+MOTOR_send cmd;
+MOTOR_recv data;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -129,7 +133,7 @@ int main(void)
   /* USER CODE BEGIN SysInit */
   pid_init(&position_pid, 0.5, 0, 0);
   pid_init(&speed_pid, 50, 0, 300);
-
+  SERVO_Send_recv(&cmd, &data);
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -151,7 +155,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
     lenth = laser_processframe(rxbuffer) / 1000.0; // 当前位置
+
     if (flag == 1)
     {
       target_speed = -PID_Cal(&speed_pid, lenth, target_lenth);

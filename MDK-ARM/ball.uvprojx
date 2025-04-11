@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>0</RunUserProg2>
+            <RunUserProg2>1</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -421,6 +421,26 @@
               <FilePath>..\Core\Inc\filter.h</FilePath>
             </File>
             <File>
+              <FileName>laser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\laser.c</FilePath>
+            </File>
+            <File>
+              <FileName>laser.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\laser.h</FilePath>
+            </File>
+            <File>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\motor.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -461,14 +481,34 @@
               <FilePath>../Core/Src/stm32h7xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>laser.c</FileName>
+              <FileName>jy901s.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\laser.c</FilePath>
+              <FilePath>..\Core\Src\jy901s.c</FilePath>
             </File>
             <File>
-              <FileName>laser.h</FileName>
+              <FileName>jy901s.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\Core\Inc\laser.h</FilePath>
+              <FilePath>..\Core\Inc\jy901s.h</FilePath>
+            </File>
+            <File>
+              <FileName>crc_ccitt.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\crc_ccitt.h</FilePath>
+            </File>
+            <File>
+              <FileName>motor_control.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\motor_control.h</FilePath>
+            </File>
+            <File>
+              <FileName>ris_protocol.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Core\Inc\ris_protocol.h</FilePath>
+            </File>
+            <File>
+              <FileName>GO-M8010-6.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\GO-M8010-6.c</FilePath>
             </File>
           </Files>
         </Group>

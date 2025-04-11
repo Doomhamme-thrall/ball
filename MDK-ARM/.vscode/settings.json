@@ -5,7 +5,12 @@
     "main.h": "c",
     "engine.h": "c",
     "filter.h": "c",
-    "laser.h": "c"
+    "laser.h": "c",
+    "motor.h": "c",
+    "pid.h": "c",
+    "usart.h": "c",
+    "stdio.h": "c",
+    "ris_protocol.h": "c"
   },
   "files.encoding": "utf8"
 }

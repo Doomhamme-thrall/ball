@@ -2,6 +2,23 @@
 #include <string.h> // 用于 memcpy
 #include <stdlib.h> // 用于 qsort
 
+/**
+ * @brief 比较函数，用于 qsort 对浮点数排序。
+ * @param a 指向第一个元素的指针
+ * @param b 指向第二个元素的指针
+ * @return 比较结果：-1 表示 a < b，1 表示 a > b，0 表示 a == b
+ */
+int float_compare(const void *a, const void *b)
+{
+    float diff = (*(float *)a) - (*(float *)b);
+    if (diff < 0)
+        return -1; // a < b
+    else if (diff > 0)
+        return 1; // a > b
+    else
+        return 0; // a == b
+}
+
 // 一阶低通滤波器
 /**
  * @brief 一阶低通滤波器，用于平滑信号，去除高频噪声。
@@ -82,9 +99,9 @@ float weighted_average_filter(float *inputs, float *weights, int size)
 float median_filter(float *buffer, int size)
 {
     float temp[size];
-    memcpy(temp, buffer, size * sizeof(float)); // 复制缓冲区
-    qsort(temp, size, sizeof(float), compare);  // 对数据排序
-    return temp[size / 2];                      // 返回中值
+    memcpy(temp, buffer, size * sizeof(float));      // 复制缓冲区
+    qsort(temp, size, sizeof(float), float_compare); // 对数据排序
+    return temp[size / 2];                           // 返回中值
 }
 
 // 指数加权移动平均滤波器
@@ -117,21 +134,4 @@ float kalman_filter(float input, float *estimate, float *error_cov, float proces
     *estimate = *estimate + kalman_gain * (input - *estimate);
     *error_cov = (1 - kalman_gain) * (*error_cov) + process_noise;
     return *estimate;
-}
-
-/**
- * @brief 比较函数，用于 qsort 对浮点数排序。
- * @param a 指向第一个元素的指针
- * @param b 指向第二个元素的指针
- * @return 比较结果：-1 表示 a < b，1 表示 a > b，0 表示 a == b
- */
-int compare(const void *a, const void *b)
-{
-    float diff = (*(float *)a) - (*(float *)b);
-    if (diff < 0)
-        return -1; // a < b
-    else if (diff > 0)
-        return 1; // a > b
-    else
-        return 0; // a == b
 }
